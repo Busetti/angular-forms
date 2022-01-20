@@ -1,0 +1,126 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-4">
+            <form [formGroup]="pizzadetails" (ngSubmit)="submit()">
+                <div
+                    style="display: flex; flex-direction: column;gap: 10px; box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; padding: 20px; border-radius: 3px;">
+                    <h2 style="color: blueviolet;">Select Pizza</h2>
+                    <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="selectedPizza" required
+                        style="max-width: fit-content;">
+                        <mat-button-toggle value="small">Small</mat-button-toggle>
+                        <mat-button-toggle value="medium">Medium</mat-button-toggle>
+                        <mat-button-toggle value="large">Large</mat-button-toggle>
+                    </mat-button-toggle-group>
+
+                    <mat-form-field class="full-width">
+                        <mat-select placeholder="Select Pizza" formControlName="pizzas" required>
+                            <mat-option *ngFor="let pizza of pizzas" [value]="pizza.name">
+                                {{ pizza.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <section formGroupName="toppings">
+                        <h4 class="f-b">Select your toppings:</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <p>
+                                <mat-checkbox formControlName="pepperoni">Pepperoni</mat-checkbox>
+                            </p>
+                            <p>
+                                <mat-checkbox formControlName="extracheese">Extra Cheese</mat-checkbox>
+                            </p>
+                            <p>
+                                <mat-checkbox formControlName="mushroom">Mushroom</mat-checkbox>
+                            </p>
+
+                        </div>
+
+                    </section>
+                    <div style="display: flex; gap: 20px;">
+                        <button type="submit" mat-raised-button color="primary"
+                            [disabled]="pizzadetails.invalid">Add</button>
+                        <button mat-raised-button color="warn" type="reset"
+                            (click)="pizzadetails.reset()">Reset</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-4">
+            <form [formGroup]="customerDetails" (ngSubmit)="submitCustomerDetails()">
+                <div
+                    style="display: flex; flex-direction: column;gap: 10px; box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; padding: 20px; border-radius: 3px;">
+                    <h2 style="color: indianred;">Delivery Address</h2>
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Full Name</mat-label>
+                        <input matInput placeholder="Full Name" formControlName="fullName" required>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="legacy">
+                        <mat-label>Address</mat-label>
+                        <textarea matInput formControlName="address" required></textarea>
+                        <mat-error *ngIf="customerDetails.controls['address'].hasError('required')">
+                            Address is <strong>required</strong>
+                        </mat-error>
+                        <mat-error *ngIf="customerDetails.controls['address'].hasError('minlength')">
+                            Minimum 10 Characters length <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                    <div formArrayName="phoneNumbers">
+                        <div *ngFor="let phone of phoneNumbers.controls; let i=index">
+                            <!-- <label for="phone-{{ i }}">Phone:</label> -->
+                            <!-- <input id="phone-{{ i }}" type="text" matInput [formControlName]="i"> -->
+                            <div style="display: flex; gap: 5px;">
+                                <mat-form-field appearance="legacy" style="width: 100%;">
+                                    <input matInput placeholder="Phone Number" type="number" [formControlName]="i" required>
+                                </mat-form-field>
+                                <button type="button" (click)="deletePhoneNumber(i)" mat-icon-button color="warn">
+                                    <mat-icon>remove_circle_outline</mat-icon>
+                                </button>
+                                <button mat-icon-button color="primary" type="button" (click)="addPhoneNumbers()">
+                                    <mat-icon>control_point</mat-icon>
+                                </button>
+                            </div>
+                            
+                        </div>
+
+                    </div>
+                    <button type="submit" mat-raised-button color="primary"
+                        [disabled]="customerDetails.invalid">Add</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12 col-md-6 col-lg-4 my-3">
+            <h2 *ngIf="cartPizzas.length > 0">Order Summary</h2>
+            <ng-container *ngFor="let pizza of cartPizzas">
+                <div style="box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; padding: 20px; border-radius: 3px; margin: 5px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <p style="color: blueviolet; font-size: medium; font-weight:bold;">{{pizza.pizzas}}</p>
+                        <p style=" font-weight:bold;">{{pizza.selectedPizza}}</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <p>Toppings: </p>
+                        <p style="font-size: small; font-weight:bold;" *ngIf="pizza.toppings.pepperoni">Pepperoni </p>
+                        <p style="font-size: small; font-weight:bold;" *ngIf="pizza.toppings.extracheese">Extra Cheese
+                        </p>
+                        <p style="font-size: small; font-weight:bold;" *ngIf="pizza.toppings.mushroom">Mushroom</p>
+                    </div>
+                </div>
+
+               
+            </ng-container>
+            <div style="box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; padding: 20px; border-radius: 3px; margin: 5px;" *ngIf="customer">
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <h3 style="color: indianred;">Delivery Address</h3>
+                    <p style="font-size: medium; font-weight:bold;">{{customer.fullName}}</p>
+                    <p style="font-weight:bold;">{{customer.address}}</p>
+                    <ng-container *ngFor="let phone of customerPhone">
+                        <p>{{phone}}</p>
+                    </ng-container>
+
+                    <button type="submit" mat-raised-button color="accent" >Place Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-md-4">
+            <form #signupform="ngForm" (ngSubmit)="signup(signupform)" id="signupform">
+                <div class="signupform">
+                    <h2>Signup Here</h2>
+                    <mat-form-field appearance="outline">
+                        <mat-label>no</mat-label>
+                        <input matInput placeholder="no" name="no" id="no" [(ngModel)]="no"
+                            #pickedno="ngModel" required type="number">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Username</mat-label>
+                        <input matInput placeholder="Username" name="username" id="username" [(ngModel)]="username"
+                            #pickedname="ngModel" required pattern="^([a-zA-Z0-9@*#]{8,15})$">
+                        <mat-hint>Username must be minimum 8 characters and max 15 characters </mat-hint>
+                    </mat-form-field>
+                    <div *ngIf="pickedname.invalid && pickedname.touched">
+                        <mat-error *ngIf="pickedname.errors.required">Username is Mandatory</mat-error>
+                        <mat-error *ngIf="pickedname.errors.pattern && pickedname.touched">Username must be minimum 8
+                            characters and max
+                            15 characters</mat-error>
+                    </div>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Password</mat-label>
+                        <input matInput placeholder="password" name="password" id="password" [(ngModel)]="password"
+                            #pickedpassword="ngModel" required pattern="^(?=.*\d).{4,15}$" type="password">
+                        <mat-hint>Min 4 and Max 15 characters length,and at least one numeric digit</mat-hint>
+                    </mat-form-field>
+                    <div *ngIf="pickedpassword.invalid && pickedpassword.touched">
+                        <mat-error *ngIf="pickedpassword.errors.required">Password is Mandatory</mat-error>
+                        <mat-error *ngIf="pickedpassword.errors.pattern && pickedpassword.touched">Min 4 and Max 8
+                            characters length,and at least one numeric digit</mat-error>
+                    </div>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>First Name</mat-label>
+                        <input matInput placeholder="First Name" name="firstname" id="firstname"
+                            [(ngModel)]="firstname">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Last Name</mat-label>
+                        <input matInput placeholder="First Name" name="lastname" id="lastname" [(ngModel)]="lastname">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input matInput placeholder="Email" name="email" id="email" [(ngModel)]="email" required
+                            type="email" #pickedEmail="ngModel"
+                            pattern="^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$">
+                        <mat-hint>somthing@someserver.com</mat-hint>
+                    </mat-form-field>
+                    <mat-error *ngIf="pickedEmail.invalid && pickedEmail.touched">Email is Invalid</mat-error>
+
+                    <div class="py-2">
+                    <mat-checkbox [(ngModel)]="privacypolicy" required name="privacypolicy" id="privacypolicy"
+                        class="example-margin">I agree to the <a href="http://google.com" target="_black">Terms of
+                            Service</a> & Privacy Policy</mat-checkbox>
+                    </div>
+
+                    <div style="display: flex; gap: 20px; padding-top: 20px;">
+                        <button mat-raised-button color="primary" type="submit"
+                            [disabled]="!signupform.form.valid">Signup</button>
+                        <button mat-raised-button color="warn" type="reset" (click)="signupform.reset()">Reset</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="response" *ngIf="formResponse">
+                <h2>Response</h2>
+                <pre><p>{{formResponse | json}}</p></pre>
+            </div>
+        </div>
+    </div>
+</div>

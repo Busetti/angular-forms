@@ -1,0 +1,21 @@
+<form [formGroup]="parentForm"> 
+    
+    <div formGroupName="customerDetails">
+        <h2>Delivery Address</h2>
+        <mat-form-field appearance="legacy">
+            <mat-label>Full Name</mat-label>
+            <input matInput placeholder="Placeholder" formControlName="fullName">
+        </mat-form-field>
+
+        <div formArrayName="phoneNumbers">
+            <h2>Phone Numbers</h2>
+            <button (click)="addPhoneNumbers()" type="button">+ Add Another Phone Number</button>
+          
+            <div *ngFor="let alias of phoneNumbers.controls; let i=index">
+              <!-- The repeated alias template -->
+              <label for="phone-{{ i }}">Phone:</label>
+              <input id="phone-{{ i }}" type="text" [formControlName]="i">
+            </div>
+        </div>
+    </div>
+</form>
